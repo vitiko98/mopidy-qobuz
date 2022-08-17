@@ -27,7 +27,7 @@ You will need to uninstall it if it's in your system.
 Configuration
 =============
 
-Before starting Mopidy, you must add ``username`, ``password``, ``app_id`` and ``secret`` fields
+Before starting Mopidy, you must add ``username``, ``password``, ``app_id`` and ``secret`` fields
 to the Mopidy configuration file::
 
     [qobuz]
