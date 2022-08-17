@@ -21,13 +21,13 @@ or::
 
 ``pip install mopidy-qobuz`` **IS NOT RELATED to this repository/extension.**
 
-**This extension conflicts with https://github.com/taschenb/mopidy-qobuz and https://pypi.org/project/Mopidy-Qobuz.**
+**This extension conflicts with** https://github.com/taschenb/mopidy-qobuz and https://pypi.org/project/Mopidy-Qobuz.
 You will need to uninstall it if it's in your system.
 
 Configuration
 =============
 
-Before starting Mopidy, you must add `username`, `password`, `app_id` and `secret` fields
+Before starting Mopidy, you must add ``username`, ``password``, ``app_id`` and ``secret`` fields
 to the Mopidy configuration file::
 
     [qobuz]
