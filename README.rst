@@ -6,6 +6,14 @@ Mopidy-Qobuz
 
 Requires a non-free account.
 
+Features
+============
+* Up to 24b/196k playback
+* Artist, album and track search
+* Browse support
+* Playlists support
+* Featured lists support
+* Image support
 
 Installation
 ============
@@ -21,7 +29,7 @@ or::
 
 ``pip install mopidy-qobuz`` **IS NOT RELATED to this repository/extension.**
 
-**This extension conflicts with** https://github.com/taschenb/mopidy-qobuz and https://pypi.org/project/Mopidy-Qobuz.
+**This extension conflicts with** https://github.com/taschenb/mopidy-qobuz (https://pypi.org/project/Mopidy-Qobuz).
 You will need to uninstall it if it's in your system.
 
 Configuration
@@ -46,13 +54,13 @@ The following configuration values are available:
 - ``qobuz/enabled``: If the Qobuz extension should be enabled or not.
   Defaults to ``true``.
 
-- ``qobuz/username``: Your Qobuz username (or email). You *must* provide this.
+- ``qobuz/username``: Qobuz username (or email). You *must* provide this.
 
-- ``qobuz/password``: Your Qobuz password. You *must* provide this.
+- ``qobuz/password``: Qobuz password. You *must* provide this.
 
-- ``qobuz/app_id``: Your Qobuz application app id. You *must* provide this.
+- ``qobuz/app_id``: Qobuz app id. You *must* provide this.
 
-- ``qobuz/secret``: Your Qobuz secret key. You *must* provide this.
+- ``qobuz/secret``: Qobuz secret key. You *must* provide this.
 
 - ``qobuz/quality``: Quality code integer. 5 is 320 MP3; 6 is FLAC; 7 is FLAC 24
   ≤ 96; 27 is FLAC 24 > 96. Defaults to 6.
