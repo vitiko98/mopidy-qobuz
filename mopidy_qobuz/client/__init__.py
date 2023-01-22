@@ -645,6 +645,18 @@ class User:
         except KeyError:
             return []
 
+    def get_favorites_artists(self, type="artists", offset=0, limit=400):
+        # TODO: serialize more types
+        response = self._client.get(
+            "favorite/getUserFavorites",
+            {"type": type, "offset": offset, "limit": limit},
+        ).json()
+
+        try:
+            return [Artist(self._client, data) for data in response["artists"]["items"]]
+        except KeyError:
+            return []
+
     def modify_favorites(self, method="create", albums=None, artists=None, tracks=None):
         data = {
             "artist_ids": _to_str_list(artists),
