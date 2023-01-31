@@ -10,6 +10,7 @@ from mopidy_qobuz.client import Featured
 from mopidy_qobuz.client import Focus
 from mopidy_qobuz.client import Playlist
 from mopidy_qobuz.client import User
+from mopidy_qobuz.client import Artist
 
 logger = logging.getLogger(__name__)
 
@@ -53,10 +54,10 @@ FEATURED_ALBUM_TYPES = {
 
 _FAVORITES = models.Ref.directory(uri="qobuz:favorites", name="Favorites")
 _FAVORITE_ALBUMS = models.Ref.directory(uri="qobuz:favorites:albums", name="Albums")
+_FAVORITE_ARTISTS = models.Ref.directory(uri="qobuz:favorites:artists", name="Artists") # Agregado
 _FAVORITE_PLAYLISTS = models.Ref.directory(
     uri="qobuz:favorites:playlists", name="Playlists"
 )
-
 
 _FEATURED = models.Ref.directory(uri="qobuz:featured", name="Featured (Recommended)")
 _FEATURED_PLAYLISTS = models.Ref.directory(
@@ -116,6 +117,10 @@ def _favorite_contents(*, uri, client):
         to_return = [
             translators.to_album_ref(album) for album in user.get_favorites(limit=50)
         ]
+    if uri.startswith("qobuz:favorites:artists"):
+        to_return = [
+            translators.to_artist_ref(artist) for artist in user.get_favorites_artists(limit=500)
+        ]
     elif uri.startswith("qobuz:favorites:playlists"):
         to_return = [
             translators.to_playlist_ref(playlist)
@@ -137,6 +142,12 @@ def _browse_album(*, uri: str, client):
     album = Album.from_id(client, album_id)
     tracks = [translators.to_track_ref(track, False) for track in album.tracks]
     return _filter_none(tracks)
+
+def _browse_artist(*, uri: str, client):
+    artist_id = uri.split(":")[-1]
+    artist = Artist.from_id(client, artist_id)
+    albums = [translators.to_album_ref(album, False) for album in artist.albums]
+    return _filter_none(albums)
 
 
 def _browse_focus(*, uri: str, client):
@@ -196,7 +207,7 @@ def _filter_none(items):
 
 _STATIC = {
     "qobuz:directory": [_FAVORITES, _FEATURED],
-    "qobuz:favorites": [_FAVORITE_ALBUMS, _FAVORITE_PLAYLISTS],
+    "qobuz:favorites": [_FAVORITE_ALBUMS, _FAVORITE_ARTISTS, _FAVORITE_PLAYLISTS],
     "qobuz:featured": [_FEATURED_ALBUMS, _FEATURED_PLAYLISTS, _FEATURED_FOCUS],
     "qobuz:featured:albums": _featured_album_tags(),
     "qobuz:featured:focus": _genre_contents("qobuz:featured:focus"),
@@ -208,6 +219,7 @@ _STATIC = {
 _CALLABLES = {
     "qobuz:favorites:albums": _favorite_contents,  # list of albums or playlists
     "qobuz:favorites:playlists": _favorite_contents,  # list of albums or playlists
+    "qobuz:favorites:artists": _favorite_contents,  # list of albums or playlists
     "qobuz:featured:playlists:genres:": _browse_featured_playlist_genres,
     "qobuz:featured:playlists:tags:": _browse_featured_playlist_tags,
     "qobuz:featured:albums:tags:": _browse_featured_album_tags,
@@ -215,4 +227,5 @@ _CALLABLES = {
     "qobuz:playlist:": _browse_playlist,
     "qobuz:album:": _browse_album,
     "qobuz:focus:": _browse_focus,
+    "qobuz:artist": _browse_artist,  # Agregado
 }
