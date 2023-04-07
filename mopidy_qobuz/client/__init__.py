@@ -149,6 +149,9 @@ class DownloadableTrack:
         self._client = client
         self._size = None
 
+    def __hash__(self) -> int:
+        return hash(self.id)
+
     @classmethod
     def from_id(cls, client: Client, id, format_id=6, intent="stream"):
         """
