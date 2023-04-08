@@ -23,19 +23,29 @@ class QobuzPlaybackProvider(backend.PlaybackProvider):
         track_id = uri.split(":")[-1]
 
         logger.debug("Track ID: %s", track_id)
+        downloadable = None
 
         if track_id in self._tracks:
             downloadable = self._tracks[track_id]
         else:
-            try:
-                downloadable = DownloadableTrack.from_id(
-                    client, track_id, format_id=self._format_id
-                )
-            except Exception as error:
-                logger.warning("%s raised getting URL for %s", error, uri)
+            for _ in range(3):
+                try:
+                    downloadable = DownloadableTrack.from_id(
+                        client, track_id, format_id=self._format_id
+                    )
+                except ConnectionResetError:
+                    logger.warning("ConnectionResetError. Trying again")
+                    continue
+                except Exception as error:
+                    logger.warning("%s raised getting URL for %s", error, uri)
+                    return None
+                else:
+                    self._tracks[track_id] = downloadable
+                    break
+
+            if not downloadable:
+                logger.warning("Couldn't get DownloadableTrack")
                 return None
-            else:
-                self._tracks[track_id] = downloadable
 
         if downloadable.demo:
             logger.info("%s is a demo. Can't play", uri)
