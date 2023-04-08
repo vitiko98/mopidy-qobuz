@@ -33,12 +33,13 @@ class QobuzPlaybackProvider(backend.PlaybackProvider):
                     downloadable = DownloadableTrack.from_id(
                         client, track_id, format_id=self._format_id
                     )
-                except ConnectionResetError:
-                    logger.warning("ConnectionResetError. Trying again")
-                    continue
                 except Exception as error:
-                    logger.warning("%s raised getting URL for %s", error, uri)
-                    return None
+                    logger.warning(
+                        "%s raised getting URL for %s. Trying again...",
+                        type(error),
+                        uri,
+                    )
+                    continue
                 else:
                     self._tracks[track_id] = downloadable
                     break
