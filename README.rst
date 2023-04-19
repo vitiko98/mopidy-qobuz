@@ -74,6 +74,9 @@ The following configuration values are available:
 - ``qobuz/search_artist_count``: Maximum number of artists returned in search
   results. Defaults to 0.
 
+- ``qobuz/custom_libraries``: An optional directory containing custom YAML library files. 
+  See ``tests/data/library.yml`` for more info.
+
 Status
 =================
 This extension is in alpha development.

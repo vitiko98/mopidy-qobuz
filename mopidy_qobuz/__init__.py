@@ -38,6 +38,7 @@ class Extension(ext.Extension):
         schema["search_artist_count"] = config.Integer()
         schema["search_track_count"] = config.Integer()
         schema["search_album_count"] = config.Integer()
+        schema["custom_libraries"] = config.Path(optional=True)
 
         return schema
 
