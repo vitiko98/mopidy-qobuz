@@ -33,7 +33,7 @@ class QobuzLibraryProvider(backend.LibraryProvider):
         if not uri or not uri.startswith("qobuz"):
             return []
 
-        return browse(uri, self._backend._client)
+        return browse(uri, self._backend._client, self._config)
 
     def lookup(self, uris=None):
         if not uris:
