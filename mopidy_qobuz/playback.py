@@ -25,7 +25,7 @@ class QobuzPlaybackProvider(backend.PlaybackProvider):
         logger.debug("Track ID: %s", track_id)
         downloadable = None
 
-        if track_id in self._tracks:
+        if track_id in self._tracks and not self._tracks[track_id].is_expired():
             downloadable = self._tracks[track_id]
         else:
             for _ in range(3):
