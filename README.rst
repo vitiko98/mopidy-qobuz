@@ -27,10 +27,10 @@ or::
     pip install git+https://github.com/vitiko98/mopidy-qobuz
 
 
-``pip install mopidy-qobuz`` **IS NOT RELATED to this repository/extension.**
+``pip install mopidy-qobuz`` **IS NOT RELATED** to this repository/extension.
 
 **This extension conflicts with** https://github.com/taschenb/mopidy-qobuz (https://pypi.org/project/Mopidy-Qobuz).
-You will need to uninstall it if it's in your system.
+You will need to uninstall it if it is currently installed in your environment.
 
 Configuration
 =============
