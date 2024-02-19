@@ -80,20 +80,31 @@ class QobuzLibraryProvider(backend.LibraryProvider):
             logger.debug("Ignoring falsy query: %s", query)
             return None
 
-        # For qobuz API, which is smart enough
-        query = " ".join(" ".join(value) for value in query.values()).strip()
-        if not query:
-            logger.debug("Query is empty: %s", query)
-            return None
+        tracks = list()
+        albums = list()
+        artists = list()
 
-        uri = f"qobuz:search:{urllib.parse.quote(query)}"
-        logger.debug("Generated uri: %s", uri)
+        if "uri" in query:
+            uri = query["uri"][0]
+            if uri.startswith("qobuz:album:"):
+                tracks = self.lookup(uri)
+            else:
+                return None
+        else:
+            # For qobuz API, which is smart enough
+            query = " ".join(" ".join(value) for value in query.values()).strip()
+            if not query:
+                logger.debug("Query is empty: %s", query)
+                return None
 
-        albums = self._search(translators.to_album, Album, "search_album_count", query)
-        artists = self._search(
-            translators.to_artist, Artist, "search_artist_count", query
-        )
-        tracks = self._search(translators.to_track, Track, "search_track_count", query)
+            uri = f"qobuz:search:{urllib.parse.quote(query)}"
+            logger.debug("Generated uri: %s", uri)
+
+            albums = self._search(translators.to_album, Album, "search_album_count", query)
+            artists = self._search(
+                translators.to_artist, Artist, "search_artist_count", query
+            )
+            tracks = self._search(translators.to_track, Track, "search_track_count", query)
 
         return models.SearchResult(
             uri=uri,
