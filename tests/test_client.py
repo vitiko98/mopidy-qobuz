@@ -17,17 +17,20 @@ pytestmark = pytest.mark.skipif(
 
 @pytest.fixture(scope="session")
 def client():
-    yield qobuz_client.Client(APP_ID, SECRET)
+    client_ = qobuz_client.Client(APP_ID, SECRET)
+    client_.login(EMAIL, PWD)
+    yield client_
 
 
 def test_client(client):
     assert client is not None
 
 
+def test_track_not_expired(client):
+    d_track = qobuz_client.DownloadableTrack.from_id(client, "156914988")
+    assert d_track.is_expired() is False
+
+
 def test_login_raises_authentication_error(client):
     with pytest.raises(qobuz_client.AuthenticationError):
         client.login("foo", "bar")
-
-
-def test_login(client):
-    client.login(EMAIL, PWD)

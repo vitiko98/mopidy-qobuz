@@ -1,0 +1,10 @@
+# The title of the custom library. This will be used to identify
+# the library, so avoid duplicates.
+title: Test list
+
+# Set the items of the library
+items: 
+  # Title of the subdirectory. (Avoid duplicates!)
+  2010s Hip Hop:
+    # List of album, track or playlist URIs
+    - qobuz:album:0060253743926

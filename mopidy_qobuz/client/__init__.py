@@ -2,10 +2,12 @@
 # Author : Vitiko <vhnz98@gmail.com>
 # -*- coding: utf-8 -*-
 
+import datetime
 import hashlib
 import json
 import logging
 import time
+import urllib.parse
 
 import requests
 
@@ -113,7 +115,7 @@ class Client:
         return self._label
 
     def raise_for_secret(self):
-        DownloadableTrack.from_id(self, "5966783", 5)
+        DownloadableTrack.from_id(self, "156914988", 5)
 
 
 _exception_codes = {400: BadRequestError, 401: AuthenticationError, 404: NotFoundError}
@@ -146,8 +148,26 @@ class DownloadableTrack:
         self.bit_depth = data.get("bit_depth", 16)
         self.sampling_rate = data.get("sampling_rate", 44.1)
         self.restrictions = data.get("restrictions", [])
+
+        try:
+            self.etsp = datetime.datetime.fromtimestamp(
+                int(urllib.parse.parse_qs(self.url)["etsp"][0])
+            )
+        except (KeyError, IndexError):
+            self.etsp = None
+
         self._client = client
         self._size = None
+
+    def __hash__(self) -> int:
+        return hash(self.id)
+
+    def is_expired(self):
+        if self.etsp is None:
+            logger.debug("Track doesn't have etsp data")
+            return True
+
+        return datetime.datetime.now() > self.etsp
 
     @classmethod
     def from_id(cls, client: Client, id, format_id=6, intent="stream"):
